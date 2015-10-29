@@ -1,0 +1,99 @@
+[
+	{
+		"name": "Section 1",
+		"children":
+		[
+			{
+				"name": "List",
+				"children":
+				[
+					"Entry A",
+					"Entry B"
+				]
+			},
+			{
+				"name": "Property X",
+				"value": "`Value`",
+				"children":
+				[
+					{
+						"name": "Subproperty X.1",
+						"value": "X1"
+					},
+					{
+						"name": "Subproperty X.2",
+						"value": "X2"
+					}
+				]
+			},
+			{
+				"name": "Property Y",
+				"children":
+				[
+					{
+						"name": "Subproperty Y.1",
+						"value": "Y1"
+					},
+					{
+						"name": "Subproperty Y.2",
+						"value": "Y2"
+					}
+				]
+			},
+			{
+				"name": "Chapter 1.1",
+				"children":
+				[
+					{
+						"name": "Typ",
+						"value": "chapter"
+					},
+					{
+						"name": "Number",
+						"value": "1.1"
+					},
+					{
+						"name": "Paragraph 1.1.1",
+						"children":
+						[
+							{
+								"name": "list",
+								"children":
+								[
+									{
+										"name": "a",
+										"children":
+										[
+											{
+												"name": "y",
+												"value": "3"
+											},
+											{
+												"name": "x",
+												"value": "4"
+											}
+										]
+									},
+									{
+										"name": "b",
+										"children":
+										[
+											{
+												"name": "y",
+												"value": "5"
+											},
+											{
+												"name": "x",
+												"value": "6"
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+]

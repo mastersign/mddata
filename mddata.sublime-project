@@ -1,0 +1,29 @@
+{
+	"folders":
+	[
+		{
+			"name": "Project Setup",
+			"path": ".",
+			"folder_exclude_patterns": ["*"],
+			"file_include_patterns": ["*.js", "*.json", "*.md"]
+		},
+		{
+			"name": "Examples",
+			"path": "examples"
+		},
+		{
+			"name": "Code",
+			"path": "./src",
+			"file_include_patterns": ["*.js"]
+		},
+		{
+			"name": "Tests",
+			"path": "./tests",
+			"folder_exclude_patterns": ["data"]
+		},
+		{
+			"name": "Test Data",
+			"path": "./tests/data"
+		}
+	]
+}

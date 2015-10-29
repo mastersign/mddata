@@ -1,0 +1,35 @@
+{
+  "name": "mddata",
+  "version": "0.1.0",
+  "description": "Extracts data from a markdown document.",
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mastersign/mddata.git"
+  },
+  "main": "./src/index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "tape ./tests/*.js | tap-spec"
+  },
+  "keywords": [
+    "markdown",
+    "include",
+    "csv"
+  ],
+  "author": "Tobias Kiertscher <dev@mastersign.de>",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^3.9.3",
+    "through2": "^0.6.1",
+    "vinyl": "^0.3.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gulp-shell": "^0.2.9",
+    "tap-spec": "^0.2.0",
+    "tape": "^2.14.0"
+  }
+}
