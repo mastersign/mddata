@@ -22,14 +22,15 @@
   "author": "Tobias Kiertscher <dev@mastersign.de>",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^3.9.3",
-    "through2": "^0.6.1",
-    "vinyl": "^0.3.2"
+    "lodash": "^3.0.0",
+    "markdown-it": "^5.0.0",
+    "through2": "^2.0.0",
+    "vinyl": "^0.3.0"
   },
   "devDependencies": {
-    "gulp": "^3.8.7",
-    "gulp-shell": "^0.2.9",
+    "gulp": "^3.0.0",
+    "gulp-shell": "^0.2.0",
     "tap-spec": "^0.2.0",
-    "tape": "^2.14.0"
+    "tape": "^2.0.0"
   }
 }
