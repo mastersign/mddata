@@ -7,7 +7,7 @@ var mddata = require('../src/index');
 var basePath = path.resolve('tests/data');
 
 var checkFileTransformation = function (t, fileName) {
-	var expectedFile = path.join(basePath, fileName + '.js');
+	var expectedFile = path.join(basePath, fileName + '.json');
 	var expected = JSON.parse(fs.readFileSync(expectedFile, 'utf-8'));
 
 	var sourceFile = path.join(basePath, fileName + '.md');
