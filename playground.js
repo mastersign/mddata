@@ -47,7 +47,7 @@ var __debug = function(msg) {
 var isText = _.isString;
 var isNode = function (x) { return isText(x.name); };
 var isArray = _.isArray;
-var isContainer = function (x) { return isArray(x.children); }
+var isContainer = function (x) { return isArray(x.children); };
 var isNodeWithChildren = function (x) { return isNode(x) && isContainer(x); };
 
 var formatData = function (data) {
@@ -112,7 +112,7 @@ var formatResult = function (result) {
 var extendResultList = function (resultList, additionals) {
 	function arraysEqual(a, b) {
 		if (a === b) return true;
-		if (a == null || b == null) return false;
+		if (a === null || b === null) return false;
 		if (a.length != b.length) return false;
 		for (var i = 0; i < a.length; ++i) {
 			if (a[i] !== b[i]) return false;
@@ -129,7 +129,7 @@ var extendResultList = function (resultList, additionals) {
 };
 
 var resolvePath = function (coll, path) {
-	if (_.size(path) == 0) {
+	if (_.size(path) === 0) {
 		return null;
 	}
 	var n = { children: coll };
@@ -185,10 +185,10 @@ var globPath = function globPath(coll, query_path, absolute, path, result) {
 
 var findNodes = function (coll, selector) {
 	var query_path = parsePath(selector);
-	if (query_path.size == 0) {
+	if (query_path.size === 0) {
 		return null;
 	}
-	var absolute = query_path[0] == '';
+	var absolute = query_path[0] === '';
 	if (absolute) {
 		query_path = _.drop(query_path, 1);
 	}
@@ -197,6 +197,7 @@ var findNodes = function (coll, selector) {
 
 var findRelativeNode = function (coll, refPath, selector) {
 	var query_path = parsePath(selector);
+	var n = resolvePath(coll, refPath);
 	
 };
 
