@@ -77,27 +77,26 @@ var escapeRegExp = function (str) {
 };
 
 var buildCriterium = function (pathPart) {
-	return new RegExp(
+	var regex = new RegExp(
 		'^' + escapeRegExp(pathPart).
 		replace(/\\\*/g, '.*').replace(/\\\?/g, '.') + '$');
+	return function (x) {
+		if (isText(x)) {
+			return regex.test(x);
+		} else if (isNode(x)) {
+			return regex.test(x.name);
+		} else {
+			return false;
+		}
+	};
 };
 
-var testNode = function (data, criterium) {
-	if (isText(data)) {
-		__debug('TEST STRING ' + formatData(data));
-		return criterium.test(data);
-	} else if (isNode(data)) {
-		__debug('TEST NODE ' + formatData(data));
-		return criterium.test(data.name);
-	} else {
-		__debug('TEST UNKNOWN');
-		return false;
+var formatResult = function (selection) {
+	if (!selection) {
+		return null;
 	}
-};
-
-var formatResult = function (result) {
-	var path = result[0];
-	var node = result[1];
+	var path = selection[0];
+	var node = selection[1];
 	if (isText(node)) {
 		return { name: node, path: path };
 	} else if (isNode(node)) {
@@ -152,18 +151,17 @@ var globPath = function globPath(coll, query_path, absolute, path, result) {
 	path = path || [];
 	result = result || [];
 	var criterium = buildCriterium(query_path[0]);
-	__debug('GLOB Criterium: ' + criterium);
-	var selection = [];
-	_.forEach(coll, function (e, i) {
-		if (testNode(e, criterium)) {
-			__debug('GLOB Select ' + i + ': ' + formatData(e));
-			selection.push([path.concat([i]), e]);
+	var selections = [];
+	_.forEach(coll, function (n, i) {
+		if (criterium(n)) {
+			__debug('GLOB Select ' + i + ': ' + formatData(n));
+			selections.push([path.concat([i]), n]);
 		}
 	});
 	if (_.size(query_path) == 1) {
-		extendResultList(result, _.map(selection, formatResult));
+		extendResultList(result, _.map(selections, formatResult));
 	} else if (_.size(query_path) > 1) {
-		_.forEach(selection, function (s) {
+		_.forEach(selections, function (s) {
 			var p = s[0];
 			var e = s[1];
 			if (e.children) {
@@ -173,9 +171,9 @@ var globPath = function globPath(coll, query_path, absolute, path, result) {
 		});
 	}
 	if (!absolute) {
-		_.forEach(coll, function (e, i) {
-			if (isNodeWithChildren(e)) {
-				result = globPath(e.children, query_path, false,
+		_.forEach(coll, function (n, i) {
+			if (isNodeWithChildren(n)) {
+				result = globPath(n.children, query_path, false,
 					path.concat([i]), result);
 			}
 		});
@@ -198,7 +196,19 @@ var findNodes = function (coll, selector) {
 var findRelativeNode = function (coll, refPath, selector) {
 	var query_path = parsePath(selector);
 	var n = resolvePath(coll, refPath);
-	
+	_.forEach(query_path, function (q) {
+		if (q === '' || q === '.') {
+			return;
+		} else if (q === '..') {
+			refPath = _.dropRight(refPath);
+		} else {
+			var criterium = buildCriterium(q);
+			var r = _.first(
+				_.filter(n.children, criterium));
+			
+		}
+	});
+	return formatResult(n);
 };
 
 var table = function (data, query) {
