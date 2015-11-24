@@ -6,6 +6,7 @@ var mdd = require('./src/index');
 
 var data = mdd('./tests/data/data.md');
 
+var query0 = { selector: '/*' };
 var query1 = { selector: '/Section 1/List/*' };
 var query2 = { selector: 'list/a/*' };
 var query3 = {
@@ -127,6 +128,17 @@ var extendResultList = function (resultList, additionals) {
 	});
 };
 
+var resolvePath = function (coll, path) {
+	if (_.size(path) == 0) {
+		return null;
+	}
+	var n = { children: coll };
+	_.forEach(path, function (i) {
+		n = n.children[i];
+	});
+	return n;
+};
+
 var globPath = function globPath(coll, query_path, absolute, path, result) {
 	if (isNodeWithChildren(coll)) {
 		coll = coll.children;
@@ -171,18 +183,91 @@ var globPath = function globPath(coll, query_path, absolute, path, result) {
 	return result;
 };
 
-var findSelection = function (coll, selector) {
-	path = parsePath(selector);
-	if (path.size == 0) {
+var findNodes = function (coll, selector) {
+	var query_path = parsePath(selector);
+	if (query_path.size == 0) {
 		return null;
 	}
-	var absolute = path[0] == '';
+	var absolute = query_path[0] == '';
 	if (absolute) {
-		path = _.drop(path, 1);
+		query_path = _.drop(query_path, 1);
 	}
-	return globPath(data, path, absolute);
+	return globPath(data, query_path, absolute);
 };
 
-console.log(findSelection(data, '/Section 1'));
-console.log(findSelection(data, '/Section 1/*/Subproperty*'));
-console.log(findSelection(data, '?/x'));
+var findRelativeNode = function (coll, refPath, selector) {
+	var query_path = parsePath(selector);
+	
+};
+
+var table = function (data, query) {
+	var nodes = findNodes(data, query.selector);
+	if (isArray(query.columns)) {
+
+	} else {
+		if (_.every(nodes, function (n) { return n.value === undefined; })) {
+			return {
+				columns: [{ text: 'Name' }],
+				rows: _.map(nodes, function (n) {
+					var cell = { text: n.name };
+					if (n.id) {
+						cell.href = '#' + n.id;
+					}
+					return [cell];
+				})
+			};
+		} else {
+			return {
+				columns: [
+					{ text: 'Name' },
+					{ text: 'Value' }
+				],
+				rows: _.map(nodes, function (n) {
+					var nameCell = { text: n.name };
+					if (n.id) {
+						nameCell.href = '#' + n.id;
+					}
+					var valueCell = { text: n.value ? n.value : null };
+					return [nameCell, valueCell];
+				})
+			};
+		}
+	}
+};
+
+var formatMarkdownCell = function (cell) {
+	if (cell.href) {
+		return '[' + cell.text + '](' + cell.href + ')';
+	} else {
+		return cell.text;
+	}
+};
+
+var formatMarkdownTable = function (table) {
+	var md = '| ' +
+		_.map(table.columns,
+			function (column) {
+				return column.text;
+			})
+			.join(' | ') + ' |\n';
+	md += '|' +
+		_.map(table.columns,
+			function (column) {
+				return _.repeat('-', _.size(column.text) + 2);
+			})
+			.join('|') + '|\n';
+	_.forEach(table.rows, function (cells) {
+		md += '| ' +
+			_.map(cells, formatMarkdownCell)
+				.join(' | ') + ' |\n';
+	});
+	return md;
+};
+
+console.log(findNodes(data, '/Section 1'));
+console.log(findNodes(data, '/Section 1/*/Subproperty*'));
+console.log(findNodes(data, '?/x'));
+
+console.log(formatMarkdownTable(table(data, query0)));
+console.log(formatMarkdownTable(table(data, query1)));
+console.log(formatMarkdownTable(table(data, query2)));
