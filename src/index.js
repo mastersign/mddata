@@ -8,7 +8,7 @@ var md = require('markdown-it')();
 
 var parseMarkdown = function (text) {
     'use strict';
-    return md.parse(text);
+    return md.parse(text, {});
 };
 
 var tailorElement = null;
@@ -37,7 +37,7 @@ var buildTree = function (s) {
     var pivot = tree;
     var stack = [tree];
     var inHeading = false;
-    
+
     var push = function (typ, text, level) {
         var p = {
             typ: typ,
@@ -60,7 +60,7 @@ var buildTree = function (s) {
             n.id = m[1];
         }
     };
-    
+
     _.forEach(s, function (e) {
         if (!inHeading) {
             if (e.type == 'heading_open') {
@@ -144,7 +144,6 @@ var extractDataFromMarkdown = function (text) {
 var transformText = function (text) {
     'use strict';
     var data = extractDataFromMarkdown(text);
-    // return JSON.stringify(data, null, '  ');
     return data;
 };
 
@@ -155,12 +154,18 @@ var transformBuffer = function (buffer) {
 
 var transformFile = function (filePath) {
     'use strict';
-    if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
-        throw 'File not found.';
-    }
     var referencePath = path.dirname(filePath);
     var text = fs.readFileSync(filePath, 'utf8');
     return transformText(text, referencePath);
+};
+
+var canReadFile = function (path) {
+    try {
+        fs.accessSync(path, fs.R_OK);
+        return true;
+    } catch (e) {
+        return false;
+    }
 };
 
 var extractor = function (fileOrText) {
@@ -168,13 +173,11 @@ var extractor = function (fileOrText) {
 
     if (fileOrText) {
         if (typeof(fileOrText) === 'string') {
-            try {
-                fs.accessSync(fileOrText, fs.R_OK);
-                // extractor(filePath) -> returns the processed content of the file
+            if (canReadFile(fileOrText)) {
+                // extractor(filePath) -> returns the extracted data of the file
                 return transformFile(fileOrText);
-            } catch (e) {
-                console.log(e);
-                // extractor(text) -> returns the processed text
+            } else {
+                // extractor(text) -> returns the extracted data of the text
                 return transformText(fileOrText);
             }
         } else {
