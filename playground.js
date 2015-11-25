@@ -4,8 +4,6 @@ var mdd = require('./src/index');
 
 //fs.writeFileSync('./tmp/result.json', JSON.stringify(mdd('./tests/data/data.md'), null, '  '));
 
-var data = mdd('./tests/data/data.md');
-
 var query0 = { selector: '/*' };
 var query1 = { selector: '/Section 1/List/*' };
 var query2 = { selector: 'list/a/*' };
@@ -25,8 +23,13 @@ var query3 = {
 	]
 };
 var query4 = {
-	selector: 'Paragraph 1.1.1/list/*/x',
+	selector: 'list/*/x',
 	columns: [
+		{
+			name: 'Chapter',
+			selector: '../../..',
+			attribute: 'name'
+		},
 		{
 			name: 'List',
 			selector: '..',
@@ -198,7 +201,7 @@ var findNodes = function (coll, selector) {
 	if (absolute) {
 		queryPath = _.drop(queryPath, 1);
 	}
-	return globPath(data, queryPath, absolute);
+	return globPath(coll, queryPath, absolute);
 };
 
 var firstMatchingChild = function (node, criterium) {
@@ -331,6 +334,8 @@ var formatMarkdownTable = function (table) {
 	});
 	return md;
 };
+
+var data = mdd('./tests/data/data.md');
 
 console.log(findNodes(data, '/Section 1'));
 console.log(findNodes(data, '/Section 1/*/Subproperty*'));
