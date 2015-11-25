@@ -10,7 +10,7 @@ var query0 = { selector: '/*' };
 var query1 = { selector: '/Section 1/List/*' };
 var query2 = { selector: 'list/a/*' };
 var query3 = {
-	selector: '/Section 1/List/*',
+	selector: '/Section 1/Property */*',
 	columns: [
 		{
 			name: 'Entry',
@@ -25,7 +25,7 @@ var query3 = {
 	]
 };
 var query4 = {
-	selector: '/Paragraph 1.1.1/list/*/x',
+	selector: 'Paragraph 1.1.1/list/*/x',
 	columns: [
 		{
 			name: 'List',
@@ -36,6 +36,11 @@ var query4 = {
 			name: 'Value',
 			selector: '.',
 			attribute: 'value'
+		},
+		{
+			name: 'Y',
+			selector: '../y',
+			attribute: 'value'
 		}
 	]
 };
@@ -45,10 +50,10 @@ var __debug = function(msg) {
 };
 
 var isText = _.isString;
-var isNode = function (x) { return isText(x.name); };
+var isNode = function (x) { return x && isText(x.name); };
 var isArray = _.isArray;
-var isContainer = function (x) { return isArray(x.children); };
-var isNodeWithChildren = function (x) { return isNode(x) && isContainer(x); };
+var isContainer = function (x) { return x && isArray(x.children); };
+var isNodeWithChildren = function (x) { return x && isNode(x) && isContainer(x); };
 
 var formatData = function (data) {
 	if (isText(data)) {
@@ -135,10 +140,13 @@ var resolvePath = function (coll, path) {
 	_.forEach(path, function (i) {
 		n = n.children[i];
 	});
+	if (isText(n)) {
+		n = { name: n };
+	}
 	return n;
 };
 
-var globPath = function globPath(coll, query_path, absolute, path, result) {
+var globPath = function globPath(coll, queryPath, absolute, path, result) {
 	if (isNodeWithChildren(coll)) {
 		coll = coll.children;
 	}
@@ -147,10 +155,10 @@ var globPath = function globPath(coll, query_path, absolute, path, result) {
 		return null;
 	}
 	__debug('GLOB ' + formatData(coll));
-	__debug('GLOB Path (absolute=' + absolute + '): ' + query_path);
+	__debug('GLOB Path (absolute=' + absolute + '): ' + queryPath);
 	path = path || [];
 	result = result || [];
-	var criterium = buildCriterium(query_path[0]);
+	var criterium = buildCriterium(queryPath[0]);
 	var selections = [];
 	_.forEach(coll, function (n, i) {
 		if (criterium(n)) {
@@ -158,14 +166,14 @@ var globPath = function globPath(coll, query_path, absolute, path, result) {
 			selections.push([path.concat([i]), n]);
 		}
 	});
-	if (_.size(query_path) == 1) {
+	if (_.size(queryPath) == 1) {
 		extendResultList(result, _.map(selections, formatResult));
-	} else if (_.size(query_path) > 1) {
+	} else if (_.size(queryPath) > 1) {
 		_.forEach(selections, function (s) {
 			var p = s[0];
 			var e = s[1];
 			if (e.children) {
-				result = globPath(e.children, _.drop(query_path),
+				result = globPath(e.children, _.drop(queryPath),
 					absolute, p, result);
 			}
 		});
@@ -173,7 +181,7 @@ var globPath = function globPath(coll, query_path, absolute, path, result) {
 	if (!absolute) {
 		_.forEach(coll, function (n, i) {
 			if (isNodeWithChildren(n)) {
-				result = globPath(n.children, query_path, false,
+				result = globPath(n.children, queryPath, false,
 					path.concat([i]), result);
 			}
 		});
@@ -182,39 +190,86 @@ var globPath = function globPath(coll, query_path, absolute, path, result) {
 };
 
 var findNodes = function (coll, selector) {
-	var query_path = parsePath(selector);
-	if (query_path.size === 0) {
+	var queryPath = parsePath(selector);
+	if (queryPath.size === 0) {
 		return null;
 	}
-	var absolute = query_path[0] === '';
+	var absolute = queryPath[0] === '';
 	if (absolute) {
-		query_path = _.drop(query_path, 1);
+		queryPath = _.drop(queryPath, 1);
 	}
-	return globPath(data, query_path, absolute);
+	return globPath(data, queryPath, absolute);
+};
+
+var firstMatchingChild = function (node, criterium) {
+	var nodesWithIndex = _.map(
+		node.children,
+		function (n, i) { return [i, n]; });
+	var matchingNodesWithIndex = _.filter(
+		nodesWithIndex,
+		function (r) { return criterium(r[1]); });
+	return _.first(matchingNodesWithIndex);
 };
 
 var findRelativeNode = function (coll, refPath, selector) {
-	var query_path = parsePath(selector);
+	var queryPath = parsePath(selector);
 	var n = resolvePath(coll, refPath);
-	_.forEach(query_path, function (q) {
+	__debug('FIND RELATIVE ROOT ' + formatData(n));
+	_.forEach(queryPath, function (q) {
+		__debug('FIND RELATIVE POS ' + refPath + ': ' + q);
 		if (q === '' || q === '.') {
+			__debug('FIND RELATIVE skip');
 			return;
 		} else if (q === '..') {
+			__debug('FIND RELATIVE parent');
 			refPath = _.dropRight(refPath);
+			n = resolvePath(coll, refPath);
 		} else {
-			var criterium = buildCriterium(q);
-			var r = _.first(
-				_.filter(n.children, criterium));
-			
+			var r = firstMatchingChild(n, buildCriterium(q));
+			if (r) {
+				__debug('FIND RELATIVE children: ' + q + ' -> ' + r[1].name);
+				n = r[1];
+				refPath.push(r[0]);
+			} else {
+				__debug('FIND RELATIVE children: ' + q + ' NOT FOUND');
+			}
 		}
 	});
-	return formatResult(n);
+	return n;
 };
+
+var cellFromNode = function(node, attribute) {
+	if (!node) {
+		return null;
+	}
+	if (attribute === 'name') {
+		var cell = { text: node.name };
+		if (node.id) {
+			cell.href = '#' + node.id;
+		}
+		return cell;
+	}
+	if (attribute === 'value') {
+		return { text: node.value ? node.value : null };
+	}
+	return { text: 'unknown attribute: ' + attribute };
+}
 
 var table = function (data, query) {
 	var nodes = findNodes(data, query.selector);
 	if (isArray(query.columns)) {
-
+		return {
+			columns: _.map(query.columns, function (col) {
+				return { text: col.name };
+			}),
+			rows: _.map(nodes, function (node) {
+				return _.map(query.columns, function (col) {
+					var cellNode = findRelativeNode(
+						data, node.path, col.selector);
+					return cellFromNode(cellNode, col.attribute);
+				});
+			})
+		};
 	} else {
 		if (_.every(nodes, function (n) { return n.value === undefined; })) {
 			return {
@@ -247,11 +302,13 @@ var table = function (data, query) {
 };
 
 var formatMarkdownCell = function (cell) {
+	if (!cell) {
+		return '';
+	}
 	if (cell.href) {
 		return '[' + cell.text + '](' + cell.href + ')';
-	} else {
-		return cell.text;
 	}
+	return cell.text;
 };
 
 var formatMarkdownTable = function (table) {
@@ -282,3 +339,6 @@ console.log(findNodes(data, '?/x'));
 console.log(formatMarkdownTable(table(data, query0)));
 console.log(formatMarkdownTable(table(data, query1)));
 console.log(formatMarkdownTable(table(data, query2)));
+
+console.log(formatMarkdownTable(table(data, query3)));
+console.log(formatMarkdownTable(table(data, query4)));
