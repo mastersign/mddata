@@ -149,7 +149,8 @@ var transformText = function (text) {
 
 var transformBuffer = function (buffer) {
     'use strict';
-    return new Buffer(transformText(buffer.toString('utf8')), 'utf8');
+    var data = transformText(buffer.toString('utf8'));
+    return new Buffer(JSON.stringify(data, null, '  '), 'utf8');
 };
 
 var transformFile = function (filePath) {
