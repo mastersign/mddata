@@ -13,7 +13,7 @@ var checkFileTransformation = function (done, fileName) {
 
 	var sourceFile = path.join(basePath, fileName + '.md');
 	var result = JSON.stringify(mddata(sourceFile), null, '  ');
-	assert.equal(expected, result, 'result after data extraction matches expected file content');
+	assert.equal(result, expected, 'result after data extraction matches expected file content');
 	done();
 };
 
