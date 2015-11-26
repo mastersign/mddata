@@ -6,8 +6,15 @@ var path = require('path');
 var fs = require('fs');
 var md = require('markdown-it')();
 
+var removeHtmlComments = function (text) {
+    return text.replace(/<!--[\s\S]*?-->/gm, function (m) {
+        return '';
+    });
+};
+
 var parseMarkdown = function (text) {
     'use strict';
+    text = removeHtmlComments(text);
     return md.parse(text, {});
 };
 
