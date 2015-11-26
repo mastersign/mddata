@@ -44,6 +44,7 @@ var buildTree = function (s) {
     var pivot = tree;
     var stack = [tree];
     var inHeading = false;
+    var listTyp = null;
 
     var push = function (typ, text, level) {
         var p = {
@@ -70,34 +71,41 @@ var buildTree = function (s) {
 
     _.forEach(s, function (e) {
         if (!inHeading) {
-            if (e.type == 'heading_open') {
+            if (e.type === 'heading_open') {
                 inHeading = true;
                 var level = Number.parseInt(e.tag.slice(1));
-                for (var i = _.size(stack); i > level; i--) {
+                var i;
+                for (i = _.size(stack); i > level; i--) {
                     pop();
                 }
-                for (var i = _.size(stack); i < level; i++) {
-                    push('h', null, i);
+                for (i = _.size(stack); i < level; i++) {
+                    push('implicit', null, i);
                 }
-                push('h', '', level);
+                push('headline', '', level);
             }
-            else if (e.type == 'list_item_open') {
-                push('l', '', _.size(stack));
+            else if (e.type === 'bullet_list_open') {
+                listTyp = 'u';
             }
-            else if (e.type == 'list_item_close') {
+            else if (e.type === 'ordered_list_open') {
+                listTyp = 'o';
+            }
+            else if (e.type === 'list_item_open') {
+                push(listTyp + 'list', '', _.size(stack));
+            }
+            else if (e.type === 'list_item_close') {
                 pop();
             }
-            else if (e.type == 'inline') {
-                if (pivot.typ == 'l') {
+            else if (e.type === 'inline') {
+                if (pivot.typ === 'ulist' || pivot.typ === 'olist') {
                     pivot.text += e.content;
                 }
             }
         }
         else if (inHeading) {
-            if (e.type == 'inline') {
+            if (e.type === 'inline') {
                 pivot.text += e.content;
             }
-            else if (e.type == 'heading_close') {
+            else if (e.type === 'heading_close') {
                 extractId(pivot);
                 inHeading = false;
             }
@@ -106,30 +114,32 @@ var buildTree = function (s) {
     return tree;
 };
 
-var nodeFromText = function (text) {
-    if (text == null || text.trim().length == 0) {
-        return { };
+var nodeFromText = function (text, typ) {
+    if (text === null || text.trim().length === 0) {
+        return { typ: typ };
     }
     var p = text.indexOf(':');
     if (p >= 0) {
         return {
             name: text.slice(0, p).trim(),
+            typ: typ,
             value: text.slice(p + 1).trim()
         };
     } else {
-        return { name: text.trim() };
+        return {
+            name: text.trim(),
+            typ: typ
+        };
     }
 };
 
 var transformTree = function transformTree (n) {
-    var n2 = nodeFromText(n.text);
+    var n2 = nodeFromText(n.text, n.typ);
     if (n.id) {
         n2.id = n.id;
     }
-    if (_.size(n.children) == 0) {
-        if (!n2.value) {
-            return n2.name;
-        }
+    if (_.size(n.children) === 0) {
+        n2 = _.omit(n2, 'children');
     } else {
         n2.children = _.map(n.children, transformTree);
     }
