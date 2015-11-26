@@ -7,18 +7,17 @@ var mddata = require('../src/index');
 
 var basePath = path.resolve('./test/data');
 
-var checkFileTransformation = function (done, fileName) {
+var checkFileTransformation = function (fileName) {
 	var expectedFile = path.join(basePath, fileName + '.json');
-	var expected = fs.readFileSync(expectedFile, 'utf-8').replace(new RegExp(os.EOL, "g"), "\n");
+	var expected = JSON.parse(fs.readFileSync(expectedFile, 'utf-8'));
 
 	var sourceFile = path.join(basePath, fileName + '.md');
-	var result = JSON.stringify(mddata(sourceFile), null, '  ');
-	assert.equal(result, expected, 'result after data extraction matches expected file content');
-	done();
+	var result = mddata(sourceFile);
+	assert.deepEqual(result, expected, 'result after data extraction matches expected file content');
 };
 
 describe('data-extraction', function () {
-	it('should extract the correct data structure', function(done) {
-		checkFileTransformation(done, 'data');
+	it('should extract the correct data structure', function() {
+		checkFileTransformation('data');
 	});
 });
