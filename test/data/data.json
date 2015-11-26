@@ -120,6 +120,30 @@
     "typ": "headline",
     "children": [
       {
+        "name": "First Point",
+        "typ": "olist"
+      },
+      {
+        "name": "Second Point",
+        "typ": "olist",
+        "value": "123",
+        "children": [
+          {
+            "name": "Point 2.1",
+            "typ": "olist"
+          },
+          {
+            "name": "Point 2.2",
+            "typ": "olist",
+            "value": "456"
+          }
+        ]
+      },
+      {
+        "name": "Third Point",
+        "typ": "olist"
+      },
+      {
         "typ": "implicit",
         "children": [
           {

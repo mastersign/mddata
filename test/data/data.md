@@ -42,6 +42,12 @@ It can have multiple lines.
 
 # Section 2
 
+1. First Point
+2. Second Point: 123
+    1. Point 2.1
+    2. Point 2.2: 456
+3. Third Point
+
 #### Sub Par 2.0.0.1
 
 <!--
