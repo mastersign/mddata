@@ -17,13 +17,13 @@
 			"file_include_patterns": ["*.js"]
 		},
 		{
-			"name": "Tests",
-			"path": "./tests",
+			"name": "Test",
+			"path": "./test",
 			"folder_exclude_patterns": ["data"]
 		},
 		{
 			"name": "Test Data",
-			"path": "./tests/data"
+			"path": "./test/data"
 		}
 	]
 }

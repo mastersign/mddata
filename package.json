@@ -5,11 +5,8 @@
   "readme": "README.md",
   "repository": "mastersign/mddata",
   "main": "./src/index.js",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
-    "test": "tape ./tests/*.js | tap-spec"
+    "test": "mocha"
   },
   "keywords": [
     "markdown",
@@ -22,13 +19,6 @@
   "dependencies": {
     "lodash": "^3.0.0",
     "markdown-it": "^5.0.0",
-    "through2": "^2.0.0",
-    "vinyl": "^0.3.0"
-  },
-  "devDependencies": {
-    "gulp": "^3.0.0",
-    "gulp-shell": "^0.2.0",
-    "tap-spec": "^0.2.0",
-    "tape": "^2.0.0"
+    "through2": "^2.0.0"
   }
 }
