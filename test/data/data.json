@@ -2,82 +2,107 @@
   {
     "name": "Section 1",
     "id": "s_1",
+    "typ": "headline",
     "children": [
       {
         "name": "List",
+        "typ": "ulist",
         "children": [
-          "Entry A",
-          "Entry B"
+          {
+            "name": "Entry A",
+            "typ": "ulist"
+          },
+          {
+            "name": "Entry B",
+            "typ": "ulist"
+          }
         ]
       },
       {
         "name": "Property X",
+        "typ": "ulist",
         "value": "`Value`",
         "children": [
           {
             "name": "Subproperty X.1",
+            "typ": "ulist",
             "value": "X1"
           },
           {
             "name": "Subproperty X.2",
+            "typ": "ulist",
             "value": "X2"
           }
         ]
       },
       {
         "name": "Property Y",
+        "typ": "ulist",
         "children": [
           {
             "name": "Subproperty Y.1",
+            "typ": "ulist",
             "value": "Y1"
           },
           {
             "name": "Subproperty Y.2",
+            "typ": "ulist",
             "value": "Y2"
           }
         ]
       },
       {
         "name": "Chapter 1.1",
+        "typ": "headline",
         "id": "ch_1-1",
         "children": [
           {
             "name": "Typ",
+            "typ": "ulist",
             "value": "chapter"
           },
           {
             "name": "Number",
+            "typ": "ulist",
             "value": "1.1"
           },
           {
             "name": "Paragraph 1.1.1",
+            "typ": "headline",
             "id": "p_1-1-1",
             "children": [
               {
                 "name": "list",
+                "typ": "ulist",
                 "children": [
                   {
                     "name": "a",
+                    "typ": "ulist",
                     "children": [
                       {
                         "name": "x",
+                        "typ": "ulist",
                         "value": "3"
                       },
                       {
                         "name": "y",
+                        "typ": "ulist",
                         "value": "4"
                       }
                     ]
                   },
                   {
                     "name": "b",
+                    "typ": "ulist",
                     "children": [
                       {
                         "name": "x",
+                        "typ": "ulist",
                         "value": "5"
                       },
                       {
                         "name": "y",
+                        "typ": "ulist",
                         "value": "6"
                       }
                     ]
@@ -92,12 +117,18 @@
   },
   {
     "name": "Section 2",
+    "typ": "headline",
     "children": [
       {
+        "typ": "implicit",
         "children": [
           {
+            "typ": "implicit",
             "children": [
-              "Sub Par 2.0.0.1"
+              {
+                "name": "Sub Par 2.0.0.1",
+                "typ": "headline"
+              }
             ]
           }
         ]
