@@ -153,15 +153,9 @@ var transformDocumentToData = function (doc) {
     return transformTree(tree).children;
 };
 
-var extractDataFromMarkdown = function (text) {
-    'use strict';
-    return transformDocumentToData(parseMarkdown(text));
-};
-
 var transformText = function (text) {
     'use strict';
-    var data = extractDataFromMarkdown(text);
-    return data;
+    return transformDocumentToData(parseMarkdown(text));
 };
 
 var transformBuffer = function (buffer) {
@@ -170,40 +164,19 @@ var transformBuffer = function (buffer) {
     return new Buffer(JSON.stringify(data, null, '  '), 'utf8');
 };
 
-var transformFile = function (filePath) {
-    'use strict';
-    var referencePath = path.dirname(filePath);
-    var text = fs.readFileSync(filePath, 'utf8');
-    return transformText(text, referencePath);
-};
-
-var canReadFile = function (path) {
-    try {
-        fs.accessSync(path, fs.R_OK);
-        return true;
-    } catch (e) {
-        return false;
-    }
-};
-
-var extractor = function (fileOrText) {
+var transform = function (mdText) {
     'use strict';
 
-    if (fileOrText) {
-        if (typeof(fileOrText) === 'string') {
-            if (canReadFile(fileOrText)) {
-                // extractor(filePath) -> returns the extracted data of the file
-                return transformFile(fileOrText);
-            } else {
-                // extractor(text) -> returns the extracted data of the text
-                return transformText(fileOrText);
-            }
+    if (mdText) {
+        if (typeof(mdText) === 'string') {
+            // transform(text) -> returns the extracted data of the text
+            return transformText(mdText);
         } else {
-            throw 'Invalid first argument.';
+            throw new TypeError('Invalid argument, expects a string with Markdown text.');
         }
     }
 
-    // extractor() -> gulp transformation step
+    // transform() -> gulp transformation step
     return through.obj(function (file, enc, cb) {
         if (file.isNull()) {
             this.push(file);
@@ -222,4 +195,4 @@ var extractor = function (fileOrText) {
     });
 };
 
-module.exports = extractor;
+module.exports = transform;

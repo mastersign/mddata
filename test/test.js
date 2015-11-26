@@ -12,7 +12,7 @@ var checkFileTransformation = function (fileName) {
 	var expected = JSON.parse(fs.readFileSync(expectedFile, 'utf-8'));
 
 	var sourceFile = path.join(basePath, fileName + '.md');
-	var result = mddata(sourceFile);
+	var result = mddata(fs.readFileSync(sourceFile, 'utf-8'));
 	assert.deepEqual(result, expected, 'result after data extraction matches expected file content');
 };
 
