@@ -10,10 +10,22 @@
     + Subproperty Y.1: Y1
     + Subproperty Y.2: Y2
 
+```
+a code block {
+    to be
+    ignored!
+}
+```
+
 ## Chapter 1.1 {#ch_1-1}
+
+Some text before a list structure - should be ignored.
 
 * Typ: chapter
 * Number: 1.1
+
+> A quote to be ignored by data extraction.
+> It can have multiple lines.
 
 ### Paragraph 1.1.1 {#p_1-1-1}
 
@@ -25,52 +37,17 @@
         - x: 5
         - y: 6
 
-Absolute: headline(x), list(x), name(), value()
-
-Relative: parent(x), path/x, ./path/x
-
-Implizite Auflistung von Elementnamen:
-
-<!-- #data-table /Section 1/List/* -->
-<!--
-Entry A
-Entry B
--->
-
-Implizite Auflistung von Elementnamen aus dem Abschnitt
-
-<!-- #data-table list/a/* -->
-<!--
-x
-y
--->
-
-Explizite Auflistung von Elementnamen:
-
-<!-- #data-table
-SELECT name() AS Entries
-FROM /Section 1/List/*
--->
-<!--
-Entries
-=======
-Entry A
-Entry B
--->
-
-Auflistung von Elementnamen und -werten:
-
-<!-- #data-table
-SELECT parent(1) AS List, value() AS Value
-FROM Paragraph 1.1.1/list/*/x
--->
-<!--
-List, Value
-===========
-a, 3
-b, 5
--->
+A paragraph to be ignored by the data extraction.
+It can have multiple lines.
 
 # Section 2
 
 #### Sub Par 2.0.0.1
+
+<!--
+HTML comments should be ignored.
+
+* 1
+* 2
+* 3
+-->
