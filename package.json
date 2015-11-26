@@ -1,11 +1,9 @@
 {
   "name": "mddata",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Extracts data from a markdown document.",
   "readme": "README.md",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mastersign/mddata.git"
+  "repository": "mastersign/mddata"
   },
   "main": "./src/index.js",
   "directories": {
@@ -16,8 +14,9 @@
   },
   "keywords": [
     "markdown",
-    "include",
-    "csv"
+    "data",
+    "extraction",
+    "tree"
   ],
   "author": "Tobias Kiertscher <dev@mastersign.de>",
   "license": "MIT",
