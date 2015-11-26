@@ -12,7 +12,8 @@
     "markdown",
     "data",
     "extraction",
-    "tree"
+    "tree",
+    "gulp"
   ],
   "author": "Tobias Kiertscher <dev@mastersign.de>",
   "license": "MIT",
