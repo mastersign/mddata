@@ -40,12 +40,7 @@ Give a [Markdown] string to extract the hierarchic data.
 ``` js
 var mddata = require('mddata');
 var documentPath = 'project_a/docs/index.md';
-var documentText =
-    '# Introduction\n' +
-    '<!-- #include includes/intro.md -->\n' +
-    '# Dataset\n' +
-    '<!-- #csv values.csv -->';
-var result = mdinclude(documentText, { sourcePath: documentPath });
+var result = mdinclude('# Introduction ...');
 ```
 
 ### Create a Gulp transformation
