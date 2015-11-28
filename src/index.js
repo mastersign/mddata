@@ -73,7 +73,7 @@ var buildTree = function (s) {
         if (!inHeading) {
             if (e.type === 'heading_open') {
                 inHeading = true;
-                var level = Number.parseInt(e.tag.slice(1));
+                var level = _.parseInt(e.tag.slice(1));
                 var i;
                 for (i = _.size(stack); i > level; i--) {
                     pop();
