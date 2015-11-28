@@ -1,10 +1,10 @@
 /* global require, module, Buffer */
 
-var through = require('through2');
 var _ = require('lodash');
 var path = require('path');
 var fs = require('fs');
 var md = require('markdown-it')();
+var textTransformation = require('gulp-text-simple');
 
 var removeHtmlComments = function (text) {
     return text.replace(/<!--[\s\S]*?-->/gm, function (m) {
@@ -158,41 +158,6 @@ var transformText = function (text) {
     return transformDocumentToData(parseMarkdown(text));
 };
 
-var transformBuffer = function (buffer) {
-    'use strict';
-    var data = transformText(buffer.toString('utf8'));
-    return new Buffer(JSON.stringify(data, null, '  '), 'utf8');
-};
+var transformation = textTransformation(transformText);
 
-var transform = function (mdText) {
-    'use strict';
-
-    if (mdText) {
-        if (typeof(mdText) === 'string') {
-            // transform(text) -> returns the extracted data of the text
-            return transformText(mdText);
-        } else {
-            throw new TypeError('Invalid argument, expects a string with Markdown text.');
-        }
-    }
-
-    // transform() -> gulp transformation step
-    return through.obj(function (file, enc, cb) {
-        if (file.isNull()) {
-            this.push(file);
-            cb();
-            return;
-        }
-        if (file.isBuffer()) {
-            file.contents = transformBuffer(file.contents, path.dirname(file.path));
-            this.push(file);
-            cb();
-            return;
-        }
-        if (file.isStream()) {
-            throw 'Streams are not supported.';
-        }
-    });
-};
-
-module.exports = transform;
+module.exports = transformation;

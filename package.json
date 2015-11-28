@@ -33,6 +33,6 @@
   "dependencies": {
     "lodash": "^3.0.0",
     "markdown-it": "^5.0.0",
-    "through2": "^2.0.0"
+    "gulp-text-simple": "^0.3.0"
   }
 }
