@@ -69,5 +69,5 @@ _MdData_ is published under the MIT license.
 [npm-img]: https://img.shields.io/npm/v/mddata.svg
 [travis-img]: https://img.shields.io/travis/mastersign/mddata/master.svg
 [travis-url]: https://travis-ci.org/mastersign/mddata
-[Gulp]: http://gulp.js
+[Gulp]: http://gulpjs.com
 [Markdown]: https://daringfireball.net/projects/markdown/
