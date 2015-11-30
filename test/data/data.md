@@ -27,7 +27,7 @@ Some text before a list structure - should be ignored.
 > A quote to be ignored by data extraction.
 > It can have multiple lines.
 
-### Paragraph 1.1.1 {#p_1-1-1}
+### Paragraph 1.1.1 { #p_1-1-1 .par group="h 3" }
 
 * list
     + a

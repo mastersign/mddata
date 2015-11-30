@@ -2,6 +2,7 @@
   {
     "name": "Section 1",
     "id": "s_1",
+    "anchor": "s_1",
     "typ": "headline",
     "children": [
       {
@@ -55,6 +56,7 @@
         "name": "Chapter 1.1",
         "typ": "headline",
         "id": "ch_1-1",
+        "anchor": "ch_1-1",
         "children": [
           {
             "name": "Typ",
@@ -70,6 +72,11 @@
             "name": "Paragraph 1.1.1",
             "typ": "headline",
             "id": "p_1-1-1",
+            "anchor": "p_1-1-1",
+            "classes": [
+              "par"
+            ],
+            "group": "h 3",
             "children": [
               {
                 "name": "list",
@@ -118,6 +125,7 @@
   {
     "name": "Section 2",
     "typ": "headline",
+    "anchor": "section-2",
     "children": [
       {
         "name": "First Point",
@@ -151,7 +159,8 @@
             "children": [
               {
                 "name": "Sub Par 2.0.0.1",
-                "typ": "headline"
+                "typ": "headline",
+                "anchor": "sub-par-2.0.0.1"
               }
             ]
           }
