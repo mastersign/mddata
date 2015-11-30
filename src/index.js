@@ -4,6 +4,7 @@ var _ = require('lodash');
 var path = require('path');
 var fs = require('fs');
 var md = require('markdown-it')();
+var mdheadline = require('mdheadline');
 var textTransformation = require('gulp-text-simple');
 
 var removeHtmlComments = function (text) {
@@ -61,12 +62,11 @@ var buildTree = function (s) {
         stack.pop();
         pivot = _.last(stack);
     };
-    var extractId = function (n) {
-        var m = n.text.match(/\s+\{[ \t]*#(\S+)[ \t]*\}$/);
-        if (m) {
-            n.text = n.text.slice(0, n.text.length - m[0].length);
-            n.id = m[1];
-        }
+    var parseHeadline = function (n) {
+        var attributes = mdheadline.getAttributes(n.text);
+        var text = mdheadline.removeAttributes(n.text);
+        var anchor = mdheadline.anchor(n.text);
+        _.assign(n, attributes, { text: text, anchor: anchor });
     };
 
     _.forEach(s, function (e) {
@@ -106,7 +106,7 @@ var buildTree = function (s) {
                 pivot.text += e.content;
             }
             else if (e.type === 'heading_close') {
-                extractId(pivot);
+                parseHeadline(pivot);
                 inHeading = false;
             }
         }
@@ -134,16 +134,15 @@ var nodeFromText = function (text, typ) {
 };
 
 var transformTree = function transformTree (n) {
-    var n2 = nodeFromText(n.text, n.typ);
-    if (n.id) {
-        n2.id = n.id;
-    }
+    n = _.assign(
+        _.omit(n, ['level', 'text']), 
+        nodeFromText(n.text, n.typ));
     if (_.size(n.children) === 0) {
-        n2 = _.omit(n2, 'children');
+        n = _.omit(n, 'children');
     } else {
-        n2.children = _.map(n.children, transformTree);
+        n.children = _.map(n.children, transformTree);
     }
-    return n2;
+    return n;
 };
 
 var transformDocumentToData = function (doc) {
