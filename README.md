@@ -66,3 +66,4 @@ _MdData_ is published under the MIT license.
 [travis-url]: https://travis-ci.org/mastersign/mddata
 [Gulp]: http://gulpjs.com
 [Markdown]: https://daringfireball.net/projects/markdown/
+[gulp-text-simple]: https://www.npmjs.com/package/gulp-text-simple
