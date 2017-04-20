@@ -1,6 +1,7 @@
 # MdData
 
 [![npm package][npm-img]][npm-url]
+[![dependency status][libraries-img]][libraries-url]
 [![build status][travis-img]][travis-url]
 
 > extracting hierarchic data from [Markdown] documents
@@ -62,6 +63,8 @@ _MdData_ is published under the MIT license.
 
 [npm-url]: https://www.npmjs.com/package/mddata
 [npm-img]: https://img.shields.io/npm/v/mddata.svg
+[libraries-url]: https://libraries.io/npm/mddata
+[libraries-img]: https://img.shields.io/librariesio/github/mastersign/mddata.svg
 [travis-img]: https://img.shields.io/travis/mastersign/mddata/master.svg
 [travis-url]: https://travis-ci.org/mastersign/mddata
 [Gulp]: http://gulpjs.com
