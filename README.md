@@ -17,7 +17,7 @@ It can be used as a function or with [Gulp].
 
 ## Interface
 
-_MdData_ makes use of [GulpText _simple_][gulp-text-simple] v0.3 to provide the API.
+_MdData_ makes use of [GulpText _simple_][gulp-text-simple] to provide the API.
 Therefore, it currently supports three ways of usage.
 
 1. Use the `readFileSync(path)` function, to get the extracted
