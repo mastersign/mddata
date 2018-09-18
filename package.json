@@ -1,6 +1,6 @@
 {
   "name": "mddata",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Extracts data from a markdown document.",
   "readme": "README.md",
   "repository": "mastersign/mddata",
