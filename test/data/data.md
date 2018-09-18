@@ -1,3 +1,10 @@
+---
+creator:
+- role: Author
+  name: John Doe
+  email: john.doe@text.com
+...
+
 # Section 1 {#s_1}
 
 * List
@@ -40,7 +47,8 @@ Some text before a list structure - should be ignored.
 A paragraph to be ignored by the data extraction.
 It can have multiple lines.
 
-# Section 2
+Section 2
+=========
 
 1. First Point
 2. Second Point: 123
@@ -57,3 +65,9 @@ HTML comments should be ignored.
 * 2
 * 3
 -->
+
+Section 2.1
+---
+
+### Section 2.1.1
+Hypens with no empty line before are no start for a YAML metadata block.

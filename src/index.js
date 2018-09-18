@@ -13,8 +13,30 @@ var removeHtmlComments = function (text) {
     });
 };
 
+var removeYamlHeader = function (text) {
+    var outLines = [];
+    var emptyLine = true;
+    var inside = false;
+    _.forEach(text.split(/\r?\n/), function (l) {
+        if (inside) {
+            if (l === '---' || l === '...') {
+                inside = false;
+            }
+        } else {
+            if (emptyLine && l.trim() === '---') {
+                inside = true;
+            } else {
+                emptyLine = l.trim() === '';
+                outLines.push(l);
+            }
+        }
+    });
+    return outLines.join("\n");
+};
+
 var parseMarkdown = function (text) {
     'use strict';
+    text = removeYamlHeader(text);
     text = removeHtmlComments(text);
     return md.parse(text, {});
 };

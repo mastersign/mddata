@@ -165,6 +165,18 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Section 2.1",
+        "typ": "headline",
+        "anchor": "section-2.1",
+        "children": [
+          {
+            "anchor": "section-2.1.1",
+            "name": "Section 2.1.1",
+            "typ": "headline"
+          }
+        ]
       }
     ]
   }
